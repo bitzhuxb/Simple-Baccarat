@@ -31,8 +31,8 @@ class Baccarat:
         bet = 0
         bet_money = 0
         if self.bet_type == 0:
-            bet_index = random.randint(0,1)
-            bet_arr = [-1,1]
+            bet_index = random.randint(0,2)
+            bet_arr = [-1,0,1]
             bet = bet_arr[bet_index]
             bet_money = random.randint(1000,1100)
         else:
@@ -75,21 +75,29 @@ class Baccarat:
             xian_score = self.compute(xian)
             print "庄的第一次得分%d" % zhuang_score
             print "贤的第一次得分%d" % xian_score
-            while(zhuang_score< 6 and len(self.poker_cards) >0):
+            xian_ori = xian_score
+            zhuang_ori = zhuang_score
+            is_valid = 1
+
+            if(zhuang_score< 5 and xian_ori < 8 and len(self.poker_cards) >0):
                 zhuang.append(self.poker_cards[0])
                 del self.poker_cards[0]
                 zhuang_score = self.compute(zhuang)
        	        print "庄补牌后"
                 print zhuang
                 print "庄的补牌后得分%d" % zhuang_score
-            while(xian_score< 6 and len(self.poker_cards) >0):
+            elif(zhuang_score< 5 and xian_ori < 8 and len(self.poker_cards) ==0):
+                is_valid =0
+            if(xian_score< 6 and zhuang_ori <8 and len(self.poker_cards) >0):
                 xian.append(self.poker_cards[0])
                 del self.poker_cards[0]
                 xian_score = self.compute(xian)    
        	        print "贤补牌后"
                 print xian
                 print "贤的补牌后得分%d" % xian_score
-            if(zhuang_score >= 6 and xian_score >=6):
+            elif(xian_score< 5 and zhuang_ori < 8 and len(self.poker_cards) ==0):
+                is_valid =0
+            if(is_valid == 1):
             	if (zhuang_score > xian_score) :
             		self.money = self.money + self.bet*self.bet_money
             	else:
